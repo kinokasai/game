@@ -13,6 +13,7 @@ struct state
 struct gl_state
 {
     GLuint prog;
+    float* coord;
 };
 
 void run(sf::RenderWindow& window);
