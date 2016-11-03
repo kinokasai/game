@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -14,15 +15,7 @@
 
 gl_state gl_init()
 {
-    float vertice[] =
-    {
-        -0.5f, 0.5f,
-        0.5f, 0.5f,
-        0.5f, -0.5f,
-        -0.5f, -0.5f
-    };
-
-    float coord[] =
+    float vertices[] =
     {
         20, 20,
         20, 40,
@@ -45,7 +38,7 @@ gl_state gl_init()
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertice), vertice, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     /* Element buffers are for re-using vertices */
 
@@ -78,7 +71,7 @@ gl_state gl_init()
     state.prog = prog;
     state.coord = new float[8];
     for (auto i = 0; i < 8; i++)
-        state.coord[i] = coord[i];
+        state.coord[i] = vertices[i];
     return state;
 }
 
@@ -107,47 +100,33 @@ float* transform(sf::RenderWindow& window, float* coord)
 void draw(sf::RenderWindow& window, gl_state state)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glm::mat4 view = glm::lookAt(
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 1.0f)
-            );
+    float h = window.getSize().x;
+
+    for (int i = 0; i < 8; i+=2)
+        state.coord[i] += 1;
+
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), state.coord, GL_STATIC_DRAW);
+
+    /* The view is in GPU coordinates */
+    glm::mat4 vmat;
+
     GLint uview = glGetUniformLocation(state.prog, "view");
-    glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(vmat));
 
-    /* Init as identity matrix */
-    glm::mat4 mmat;
-    mmat = glm::translate(mmat, glm::vec3(-1.0f, 1.0f, 0.0f));
-    mmat = glm::scale(mmat, glm::vec3(0.05f, 0.05f, 1.0f));
+    /* Shift to screen coordinates */
+
+    glm::mat4 mmat; /* Init as identity matrix */
+    mmat = glm::translate(mmat, glm::vec3(-1));
+    mmat = glm::scale(mmat, glm::vec3(2/h));
+
     GLint transform = glGetUniformLocation(state.prog, "model");
     glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
 
     GLint color = glGetUniformLocation(state.prog, "tri_color");
     glUniform3f(color, 1.0f, 0.0f, 0.0f);
 
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
     window.display();
 }
-
-/*void get_transorms(sarray<sf::Transform> transforms, sarray<sf::Vector2f> pos)
-{
-    for (auto it = transforms.begin(); it != transforms.end(); ++it)
-    {
-        int id = std::get<0>(*it);
-        float rotation = 0;
-        float angle = rotation * 3.141592654f / 180.f;
-        float cosine = static_cast<float>(std::cos(angle));
-        float sine   = static_cast<float>(std::sin(angle));
-        float sxc = 0 * cosine;
-        float syc = 0 * cosine;
-        float sxs = 0 * sine;
-        float sys = 0 * sine;
-        float tx = pos[id].x;
-        float ty = pos[id].y;
-        auto tf = sf::Transform(sxc, sys, tx,
-                               -sxs, syc, ty,
-                                0.f, 0.f, 1.f);
-        *it = std::make_pair(id, tf);
-    }
-}*/
