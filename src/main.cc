@@ -17,7 +17,8 @@ int main()
     //for (auto it = val.begin(); it != val.end(); ++it)
         //std::cout << it->first << std::endl;
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "OpenGL");
+    sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Furtive Thief",
+      sf::Style::Titlebar | sf::Style::Close);
     run(window);
     return 0;
 }

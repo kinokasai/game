@@ -11,16 +11,17 @@
 #include <SFML/OpenGL.hpp>
 
 #include "shader.hh"
+#include "render.hh"
 #include "run.hh"
 
 gl_state gl_init()
 {
     float vertices[] =
     {
-        20, 20,
-        20, 40,
-        40, 40,
-        40, 20
+        -0.5, 0.5,
+        0.5, 0.5,
+        0.5, -0.5,
+        -0.5,-0.5
     };
 
     GLuint elements[] = {
@@ -101,10 +102,8 @@ void draw(sf::RenderWindow& window, gl_state state)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    float h = window.getSize().x;
-
-    for (int i = 0; i < 8; i+=2)
-        state.coord[i] += 1;
+    //for (int i = 0; i < 8; i+=2)
+        //state.coord[i] += 1;
 
     glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), state.coord, GL_STATIC_DRAW);
 
@@ -117,8 +116,9 @@ void draw(sf::RenderWindow& window, gl_state state)
     /* Shift to screen coordinates */
 
     glm::mat4 mmat; /* Init as identity matrix */
-    mmat = glm::translate(mmat, glm::vec3(-1));
-    mmat = glm::scale(mmat, glm::vec3(2/h));
+    //mmat = glm::scale(mmat, glm::vec3(scale(window.getSize().x / 2, window)));
+    //mmat = glm::translate(mmat, glm::vec3(-1));
+    //mmat = glm::scale(mmat, glm::vec3(2/h));
 
     GLint transform = glGetUniformLocation(state.prog, "model");
     glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
