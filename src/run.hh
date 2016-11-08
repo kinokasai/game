@@ -14,7 +14,9 @@ struct gl_state
 {
     GLuint prog;
     float* coord;
+    float xpos;
+    float ypos;
 };
 
 void run(sf::RenderWindow& window);
-void draw(sf::RenderWindow& window, gl_state state);
+void draw(sf::RenderWindow& window, gl_state& state);

@@ -18,10 +18,10 @@ gl_state gl_init()
 {
     float vertices[] =
     {
-        -0.5, 0.5,
-        0.5, 0.5,
-        0.5, -0.5,
-        -0.5,-0.5
+        0, 1,
+        1, 1,
+        1, 0,
+        0, 0
     };
 
     GLuint elements[] = {
@@ -98,7 +98,7 @@ float* transform(sf::RenderWindow& window, float* coord)
     return vertices;
 }
 
-void draw(sf::RenderWindow& window, gl_state state)
+void draw(sf::RenderWindow& window, gl_state& state)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -114,15 +114,27 @@ void draw(sf::RenderWindow& window, gl_state state)
 
     /* Square the square - Aspect Ratio */
 
-    glm::mat4 omat = glm::ortho(-4.f/3.f, 4.f/3.f, -1.f, 1.f, -1.f, 1.f);
+    glm::mat4 omat = glm::ortho(0.0f, 800.0f, 600.f, 0.f, -1.f, 0.f);
 
     GLint uortho = glGetUniformLocation(state.prog, "ortho");
     glUniformMatrix4fv(uortho, 1, GL_FALSE, glm::value_ptr(omat));
 
+    float xsize = 20;
+    float ysize = 20;
+
+    state.xpos += 0.05f;
+    state.xpos = fmodf(state.xpos, 800.f);
+
     glm::mat4 mmat; /* Init as identity matrix */
-    //mmat = glm::scale(mmat, glm::vec3(1.0f));
-    //mmat = glm::scale(mmat, glm::vec3(scale(20, window)));
-    //mmat = glm::scale(mmat, glm::vec3(2/h));
+    mmat = glm::translate(mmat, glm::vec3(state.xpos, state.ypos, 0.0f));
+
+    /* When there's rotation, shift origin to middle of quad. */
+
+    mmat = glm::translate(mmat, glm::vec3(.5f * xsize, .5f * ysize, 0.f));
+    mmat = glm::rotate(mmat, 0.f, glm::vec3(0.f, 0.f, 1.f));
+    mmat = glm::translate(mmat, glm::vec3(-.5f * xsize, -.5f * ysize, 0.f));
+
+    mmat = glm::scale(mmat, glm::vec3(xsize, ysize, 1.0f));
 
     GLint transform = glGetUniformLocation(state.prog, "model");
     glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
