@@ -107,17 +107,21 @@ void draw(sf::RenderWindow& window, gl_state state)
 
     glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), state.coord, GL_STATIC_DRAW);
 
-    /* The view is in GPU coordinates */
     glm::mat4 vmat;
 
     GLint uview = glGetUniformLocation(state.prog, "view");
     glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(vmat));
 
-    /* Shift to screen coordinates */
+    /* Square the square - Aspect Ratio */
+
+    glm::mat4 omat = glm::ortho(-4.f/3.f, 4.f/3.f, -1.f, 1.f, -1.f, 1.f);
+
+    GLint uortho = glGetUniformLocation(state.prog, "ortho");
+    glUniformMatrix4fv(uortho, 1, GL_FALSE, glm::value_ptr(omat));
 
     glm::mat4 mmat; /* Init as identity matrix */
-    //mmat = glm::scale(mmat, glm::vec3(scale(window.getSize().x / 2, window)));
-    //mmat = glm::translate(mmat, glm::vec3(-1));
+    //mmat = glm::scale(mmat, glm::vec3(1.0f));
+    //mmat = glm::scale(mmat, glm::vec3(scale(20, window)));
     //mmat = glm::scale(mmat, glm::vec3(2/h));
 
     GLint transform = glGetUniformLocation(state.prog, "model");
