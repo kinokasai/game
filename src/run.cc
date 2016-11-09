@@ -1,12 +1,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#include "state.hh"
 #include "render.hh"
 #include "run.hh"
 
 void run(sf::RenderWindow& window)
 {
     renderer rendr = init_renderer();
+    state state = make_state();
     sf::Event event;
     while (true)
     {
@@ -17,6 +19,6 @@ void run(sf::RenderWindow& window)
                 exit(0);
             }
 
-        draw_entities(rendr, window);
+        draw_entities(rendr, window, state.areas);
     }
 }

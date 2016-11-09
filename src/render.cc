@@ -7,15 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void draw_entities(renderer &rendr, sf::RenderWindow& window)
+void draw_entities(renderer &rendr, sf::RenderWindow& window,
+        sarray<area> areas)
 {
-    /* To remove */
-
-    sarray<area> areas;
-    areas.insert(std::make_pair(1, make_area(20, 20, 20, 20)));
-    areas.insert(std::make_pair(3, make_area(300, 400, 40, 40)));
-
-    /*          */
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 vmat;
