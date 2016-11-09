@@ -1,7 +1,8 @@
 CC=clang++
 CXX=clang++
 SRC= src/main.cc src/id.cc src/run.cc src/shader.cc src/render.cc \
-	 src/area.cc src/randomizer.cc src/state.cc
+	 src/area.cc src/randomizer.cc src/state.cc src/controller.cc \
+	 src/pevents.cc
 
 CXXFLAGS=-pedantic -g -Wall -Wextra -std=c++14
 
