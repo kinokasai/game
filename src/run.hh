@@ -16,6 +16,7 @@ struct gl_state
     float* coord;
     float xpos;
     float ypos;
+    float counter;
 };
 
 void run(sf::RenderWindow& window);

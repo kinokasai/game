@@ -71,6 +71,7 @@ gl_state gl_init()
     gl_state state;
     state.prog = prog;
     state.coord = new float[8];
+    state.counter = 0;
     for (auto i = 0; i < 8; i++)
         state.coord[i] = vertices[i];
     return state;
@@ -100,7 +101,7 @@ float* transform(sf::RenderWindow& window, float* coord)
 
 void draw(sf::RenderWindow& window, gl_state& state)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //for (int i = 0; i < 8; i+=2)
         //state.coord[i] += 1;
@@ -123,7 +124,9 @@ void draw(sf::RenderWindow& window, gl_state& state)
     float ysize = 20;
 
     state.xpos += 0.05f;
+    state.counter += 0.05f;
     state.xpos = fmodf(state.xpos, 800.f);
+    state.ypos = (int)((state.counter + 0.5f) / 800.f) * 20;
 
     glm::mat4 mmat; /* Init as identity matrix */
     mmat = glm::translate(mmat, glm::vec3(state.xpos, state.ypos, 0.0f));
