@@ -1,3 +1,4 @@
+#include "area.hh"
 #include "render.hh"
 #include "sarray.hh"
 #include "shader.hh"
@@ -5,6 +6,53 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+void draw_entities(renderer &rendr, sf::RenderWindow& window)
+{
+    /* To remove */
+
+    sarray<area> areas;
+    areas.insert(std::make_pair(1, make_area(20, 20, 20, 20)));
+    areas.insert(std::make_pair(3, make_area(300, 400, 40, 40)));
+
+    /*          */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::mat4 vmat;
+
+    GLint uview = glGetUniformLocation(rendr.program, "view");
+    glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(vmat));
+
+    /* Square the square - Aspect Ratio */
+
+    glm::mat4 omat = glm::ortho(0.0f, 800.0f, 600.f, 0.f, -1.f, 0.f);
+
+    GLint uortho = glGetUniformLocation(rendr.program, "ortho");
+    glUniformMatrix4fv(uortho, 1, GL_FALSE, glm::value_ptr(omat));
+
+    for (auto& it : areas)
+    {
+        auto& i = it.second;
+        glm::mat4 mmat;
+        mmat = glm::translate(mmat, glm::vec3(i.x, i.y, 0.f));
+
+        mmat = glm::translate(mmat, glm::vec3(.5f * i.w, .5f * i.h, 0.f));
+        mmat = glm::rotate(mmat, 0.f, glm::vec3(0.f, 0.f, 1.f));
+        mmat = glm::translate(mmat, glm::vec3(-.5f * i.w, -.5f * i.h, 0.f));
+
+        mmat = glm::scale(mmat, glm::vec3(i.w, i.h, 1.0f));
+
+        GLint transform = glGetUniformLocation(rendr.program, "model");
+        glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
+
+        GLint color = glGetUniformLocation(rendr.program, "tri_color");
+        glUniform3f(color, 1.0f, 0.0f, 0.0f);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    }
+
+    window.display();
+}
 
 renderer init_renderer()
 {
@@ -65,59 +113,4 @@ renderer init_renderer()
     renderer rendr;
     rendr.program = prog;
     return rendr;
-}
-
-void draw_entities(renderer &rendr, sf::RenderWindow& window)
-{
-    /* To remove */
-
-    sarray<std::pair<int, int>> pos;
-    sarray<std::pair<int, int>> sizes;
-    pos.insert(std::make_pair(1, std::make_pair(20, 20)));
-    pos.insert(std::make_pair(3, std::make_pair(300, 400)));
-    sizes.insert(std::make_pair(1, std::make_pair(20, 20)));
-    sizes.insert(std::make_pair(3, std::make_pair(40, 40)));
-
-    /*          */
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glm::mat4 vmat;
-
-    GLint uview = glGetUniformLocation(rendr.program, "view");
-    glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(vmat));
-
-    /* Square the square - Aspect Ratio */
-
-    glm::mat4 omat = glm::ortho(0.0f, 800.0f, 600.f, 0.f, -1.f, 0.f);
-
-    GLint uortho = glGetUniformLocation(rendr.program, "ortho");
-    glUniformMatrix4fv(uortho, 1, GL_FALSE, glm::value_ptr(omat));
-
-    for (auto& i : pos)
-    {
-        auto& pos = i.second;
-        glm::mat4 mmat;
-        mmat = glm::translate(mmat,
-                              glm::vec3(pos.first, pos.second, 0.f));
-
-        auto size = sizes[i.first];
-        int xsize = size.first;
-        int ysize = size.second;
-
-        mmat = glm::translate(mmat, glm::vec3(.5f * xsize, .5f * ysize, 0.f));
-        mmat = glm::rotate(mmat, 0.f, glm::vec3(0.f, 0.f, 1.f));
-        mmat = glm::translate(mmat, glm::vec3(-.5f * xsize, -.5f * ysize, 0.f));
-
-        mmat = glm::scale(mmat, glm::vec3(xsize, ysize, 1.0f));
-
-        GLint transform = glGetUniformLocation(rendr.program, "model");
-        glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
-
-        GLint color = glGetUniformLocation(rendr.program, "tri_color");
-        glUniform3f(color, 1.0f, 0.0f, 0.0f);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    }
-
-    window.display();
 }
