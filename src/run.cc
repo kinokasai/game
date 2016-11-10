@@ -12,9 +12,12 @@ void run(sf::RenderWindow& window)
     window.setFramerateLimit(60);
     renderer rendr = init_renderer();
     state state = make_state();
-    auto controller = make_controller(true, 0);
+    auto controller = make_controller(true, 0, 0);
+    auto sec_contr = make_controller(true, 0, 1);
     state.controllers.insert(std::make_pair(1, controller));
+    state.controllers.insert(std::make_pair(2, sec_contr));
     state.speeds.insert(std::make_pair(1, 3.f));
+    state.speeds.insert(std::make_pair(2, 3.f));
     sf::Event event;
     while (true)
     {

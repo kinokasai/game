@@ -10,8 +10,9 @@ struct controller
     std::function<void(int, std::vector<std::pair<int, PlayerEvent>>&)> control;
 };
 
-controller make_controller(bool keyboard, int id);
+controller make_controller(bool keyboard, int id, int modif);
 void control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
 void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
+void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
 void pad_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
 void apply_controls(sarray<controller> controllers, std::vector<std::pair<int, PlayerEvent>>& pevents);

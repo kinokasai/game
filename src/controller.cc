@@ -1,8 +1,9 @@
+#include <iostream>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Joystick.hpp>
 #include "controller.hh"
 
-controller make_controller(bool keyboard, int id)
+controller make_controller(bool keyboard, int pid, int kid)
 {
     struct controller controller;
     if (keyboard)
@@ -10,8 +11,10 @@ controller make_controller(bool keyboard, int id)
     else
     {
         controller.control = pad_control;
-        controller.id = id;
+        controller.id = pid;
     }
+    if (kid)
+        controller.control = second_keyboard;
     return controller;
 }
 
@@ -24,6 +27,18 @@ void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         pevents.push_back(std::make_pair(id, PlayerEvent::Up));
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Down));
+}
+
+void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Left));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Right));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Up));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         pevents.push_back(std::make_pair(id, PlayerEvent::Down));
 }
 
