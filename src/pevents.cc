@@ -8,14 +8,26 @@ void apply_events(struct state& state)
     {
         auto event = it.second;
         auto id = it.first;
+        float xdir = 0;
+        float ydir = 0;
         if (event == PlayerEvent::Left)
-            state.areas[id].x -= 0.1f;
+            xdir = -1;
         if (event == PlayerEvent::Right)
-            state.areas[id].x += 0.1f;
+            xdir = 1;
         if (event == PlayerEvent::Up)
-            state.areas[id].y -= 0.1f;
+            ydir = -1;
         if (event == PlayerEvent::Down)
-            state.areas[id].y += 0.1f;
+            ydir = 1;
+
+        if (xdir || ydir)
+        {
+            vectwo vdir = make_vectwo(xdir, ydir);
+            auto it = state.dirs.find(id);
+            if (it != state.dirs.end())
+                it->second = add_vectwo(it->second, vdir);
+            else
+                state.dirs.insert(std::make_pair(id, vdir));
+        }
     }
     state.pevents.clear();
 }
