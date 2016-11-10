@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/System/Clock.hpp>
 #include <vector>
 
 #include "area.hh"
@@ -10,6 +11,7 @@
 
 struct state
 {
+    state();
     sarray<area> areas;
     sarray<struct controller> controllers;
     sarray<vectwo> dirs;
