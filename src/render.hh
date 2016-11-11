@@ -3,8 +3,9 @@
 #include <GL/gl.h>
 #include <SFML/Graphics.hpp>
 
-#include "sarray.hh"
 #include "area.hh"
+#include "color.hh"
+#include "sarray.hh"
 
 struct renderer
 {
