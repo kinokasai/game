@@ -15,14 +15,12 @@ void run(sf::RenderWindow& window)
     state state = make_state();
     make_player(state);
     sf::Event event;
-    while (true)
+    while (window.isOpen())
     {
         while(window.pollEvent(event))
             if (event.type == sf::Event::Closed)
-            {
                 window.close();
-                exit(0);
-            }
+
         apply_controls(state.controllers, state.pevents);
         apply_events(state);
         apply_physics(state.dirs, state.areas, state.speeds);
