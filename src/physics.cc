@@ -8,7 +8,8 @@ void apply_collisions(float& axis, float dx, area& a, sarray<area>& areas)
     while (i != areas.cend())
     {
         while (detect_collision(a, i->second))
-            axis -= dx/fmax(dx, -dx);
+            /* We need /2 because of float rounding behavior */
+            axis -= dx/fmax(dx, -dx)/2;
         ++i;
     }
 
