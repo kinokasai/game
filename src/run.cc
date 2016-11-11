@@ -18,7 +18,8 @@ void run(sf::RenderWindow& window)
     while (window.isOpen())
     {
         while(window.pollEvent(event))
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed ||
+                    sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 window.close();
 
         apply_controls(state.controllers, state.pevents);

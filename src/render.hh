@@ -10,6 +10,12 @@
 struct renderer
 {
     GLuint program;
+    GLuint vao;
+    GLuint vbo;
+    GLuint ebo;
+    GLuint vert;
+    GLuint frag;
+    ~renderer();
 };
 
 void draw_entities(renderer& rendr, sf::RenderWindow& window,

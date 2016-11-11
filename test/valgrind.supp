@@ -1,0 +1,15 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/xorg/modules/dri/i965_dri.so
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/libsfml-window.so.2.4.0
+   ...
+}
+

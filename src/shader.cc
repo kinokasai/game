@@ -4,7 +4,7 @@
 
 #include "shader.hh"
 
-char* load_shader(char* fname)
+char* load_shader(const std::string& fname)
 {
 	std::ifstream file;
     file.open(fname);
@@ -13,7 +13,7 @@ char* load_shader(char* fname)
     std::string contents((std::istreambuf_iterator<char>(file)),
                           std::istreambuf_iterator<char>());
     file.close();
-    char *tmp = new char[contents.length()];
+    char *tmp = new char[contents.length() + 1];
     std::strcpy(tmp, contents.c_str());
     return tmp;
 }
@@ -39,6 +39,7 @@ GLuint get_vertex_shader()
     glShaderSource(vert, 1, &vcode, NULL);
     glCompileShader(vert);
     check_shader(vert, "vert");
+    delete[] vcode;
     return vert;
 }
 
@@ -49,5 +50,6 @@ GLuint get_fragment_shader()
     glShaderSource(frag, 1, &fcode, NULL);
     glCompileShader(frag);
     check_shader(frag, "frag");
+    delete[] fcode;
     return frag;
 }

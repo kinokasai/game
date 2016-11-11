@@ -69,45 +69,53 @@ renderer init_renderer()
     glewExperimental = true;
     glewInit();
 
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    renderer rendr;
 
-    GLuint vert = get_vertex_shader();
-    GLuint frag = get_fragment_shader();
+    glGenVertexArrays(1, &rendr.vao);
+    glBindVertexArray(rendr.vao);
 
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    rendr.vert = get_vertex_shader();
+    rendr.frag = get_fragment_shader();
+
+    glGenBuffers(1, &rendr.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, rendr.vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     /* Element buffers are for re-using vertices */
 
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glGenBuffers(1, &rendr.ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendr.ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements),
                  elements, GL_STATIC_DRAW);
 
     /* The program links together the vertex and fragment shader */
 
-    GLuint prog = glCreateProgram();
-    glAttachShader(prog, vert);
-    glAttachShader(prog, frag);
-    glBindFragDataLocation(prog, 0, "outColor");
+    rendr.program = glCreateProgram();
+    glAttachShader(rendr.program, rendr.vert);
+    glAttachShader(rendr.program, rendr.frag);
+    glBindFragDataLocation(rendr.program, 0, "outColor");
 
-    glLinkProgram(prog);
-    glUseProgram(prog);
+    glLinkProgram(rendr.program);
+    glUseProgram(rendr.program);
 
-    GLint unicolor = glGetUniformLocation(prog, "tri_color");
+    GLint unicolor = glGetUniformLocation(rendr.program, "tri_color");
     glUniform3f(unicolor, 1.0f, 0.0f, 0.0f);
 
 
-    GLint pos = glGetAttribLocation(prog, "position");
+    GLint pos = glGetAttribLocation(rendr.program, "position");
     glVertexAttribPointer(pos, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(pos);
 
-    renderer rendr;
-    rendr.program = prog;
     return rendr;
+}
+
+renderer::~renderer()
+{
+    std::cerr << "Free OpenGL resources..." << std::endl;
+    glDeleteProgram(program);
+    glDeleteShader(frag);
+    glDeleteShader(vert);
+    glDeleteBuffers(1, &ebo);
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
 }
