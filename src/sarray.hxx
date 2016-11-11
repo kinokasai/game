@@ -9,7 +9,7 @@ sarray<T>::sarray(std::string name)
 {}
 
 template <class T>
-int sarray<T>::insert(int id, T& elt)
+int sarray<T>::insert(int id, T elt)
 {
     this->insert(std::make_pair(id, elt));
     return 0;

@@ -7,7 +7,7 @@ class sarray : public boost::container::flat_map<int, T>
 {
     public:
         sarray(std::string name);
-        int insert(int id, T& elt);
+        int insert(int id, T elt);
         int insert(std::pair<int, T> value);
     private:
         std::string name_;
