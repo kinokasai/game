@@ -36,14 +36,8 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         a.y += dy;
         apply_collisions(a.y, dy, a, nearbys);
 
-        if (a.x < 0)
-            a.x = 0;
-        else if (a.x + a.w > 800)
-            a.x = 800 - a.w;
-        if (a.y < 0)
-            a.y = 0;
-        else if (a.y + a.h > 600)
-            a.y = 600 - a.h;
+        a.x = fmax(fmin(a.x, 800 - a.w), 0);
+        a.y = fmax(fmin(a.y, 600 - a.h), 0);
     }
 
     dirs.clear();
