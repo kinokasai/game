@@ -9,7 +9,8 @@ void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas)
     {
         while (detect_collision(a, *i))
             /* We need /2 because of float rounding behavior */
-            axis -= dx/fmax(dx, -dx)/2;
+            /* It's basically adding 0.5f */
+            axis -= dx/fmax(dx, -dx)/4.0f;
         ++i;
     }
 
