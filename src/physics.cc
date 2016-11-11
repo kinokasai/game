@@ -28,7 +28,7 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         float dx = sin(angle) * std::abs(dir.x) * speeds[id];
         float dy = cos(angle) * std::abs(dir.y) * speeds[id];
 
-        auto fn = std::bind(is_near, 50, a, std::placeholders::_1);
+        auto fn = std::bind(is_near, 100, a, std::placeholders::_1);
         std::vector<area> nearbys = areas.filter_vec(fn);
 
         a.x += dx;
