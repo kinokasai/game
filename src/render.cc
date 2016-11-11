@@ -111,7 +111,7 @@ renderer init_renderer()
 
 renderer::~renderer()
 {
-    std::cerr << "Free OpenGL resources..." << std::endl;
+    Logger::log().log("Free OpenGL resources...");
     glDeleteProgram(program);
     glDeleteShader(frag);
     glDeleteShader(vert);

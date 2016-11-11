@@ -8,7 +8,7 @@ Logger& Logger::log()
     return instance;
 }
 
-void Logger::log(std::string& s)
+void Logger::log(const std::string& s)
 {
     std::cerr << s << std::endl;
 }
