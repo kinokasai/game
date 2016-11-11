@@ -2,7 +2,7 @@
 
 #include "state.hh"
 
-void apply_collisions(float& axis, float dx, area& a, sarray<area>& areas);
+void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas);
 
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         sarray<float>& speeds);
