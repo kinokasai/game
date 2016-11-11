@@ -1,4 +1,5 @@
 #include "area.hh"
+#include "color.hh"
 #include "render.hh"
 #include "sarray.hh"
 #include "shader.hh"
@@ -8,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void draw_entities(renderer &rendr, sf::RenderWindow& window,
-        sarray<area> areas)
+        sarray<area>& areas, sarray<color>& colors)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -26,6 +27,7 @@ void draw_entities(renderer &rendr, sf::RenderWindow& window,
 
     for (auto& it : areas)
     {
+        auto id = it.first;
         auto& i = it.second;
         glm::mat4 mmat;
         mmat = glm::translate(mmat, glm::vec3(i.x, i.y, 0.f));
@@ -39,8 +41,9 @@ void draw_entities(renderer &rendr, sf::RenderWindow& window,
         GLint transform = glGetUniformLocation(rendr.program, "model");
         glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
 
-        GLint color = glGetUniformLocation(rendr.program, "tri_color");
-        glUniform3f(color, 1.0f, 0.0f, 0.0f);
+        color color = colors[id];
+        GLint ucolor = glGetUniformLocation(rendr.program, "color");
+        glUniform3f(ucolor, color.r, color.g, color.b);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }

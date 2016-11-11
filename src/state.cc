@@ -4,7 +4,8 @@
 #include "state.hh"
 
 state::state()
-    : areas("areas"), controllers("controllers"),
+    : areas("areas"), colors("colors"),
+      controllers("controllers"),
       dirs("dirs"), speeds("speeds")
 {
 }
@@ -12,6 +13,6 @@ state::state()
 state make_state()
 {
     state state;
-    populate(state.areas);
+    populate(state.areas, state.colors);
     return state;
 }

@@ -2,9 +2,9 @@
 
 out vec4 outColor;
 
-uniform vec3 tri_color;
+uniform vec3 color;
 
 void main()
 {
-    outColor = vec4(tri_color, 0.0f);
+    outColor = vec4(color, 0.0f);
 }

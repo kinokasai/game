@@ -26,6 +26,6 @@ void run(sf::RenderWindow& window)
         apply_controls(state.controllers, state.pevents);
         apply_events(state);
         apply_physics(state.dirs, state.areas, state.speeds);
-        draw_entities(rendr, window, state.areas);
+        draw_entities(rendr, window, state.areas, state.colors);
     }
 }

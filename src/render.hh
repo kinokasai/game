@@ -12,6 +12,6 @@ struct renderer
 };
 
 void draw_entities(renderer& rendr, sf::RenderWindow& window,
-        sarray<area> areas);
+        sarray<area>& areas, sarray<color>& colors);
 
 renderer init_renderer();
