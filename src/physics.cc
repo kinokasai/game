@@ -2,8 +2,20 @@
 
 #include "physics.hh"
 
+void apply_collisions(float& axis, float dx, area& a, sarray<area>& areas)
+{
+    auto i = areas.cbegin();
+    while (i != areas.cend())
+    {
+        while (detect_collision(a, i->second))
+            axis -= dx/fmax(dx, -dx);
+        ++i;
+    }
+
+}
+
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
-        sarray<float>& speed)
+        sarray<float>& speeds)
 {
     for (auto &it : dirs)
     {
@@ -12,20 +24,38 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         auto& a = areas[id];
 
         float angle = std::atan2(dir.x, dir.y);
-        float dx = sin(angle) * std::abs(dir.x) * speed[id];
-        float dy = cos(angle) * std::abs(dir.y) * speed[id];
+        float dx = sin(angle) * std::abs(dir.x) * speeds[id];
+        float dy = cos(angle) * std::abs(dir.y) * speeds[id];
+
+        areas.erase(id);
 
         a.x += dx;
+        apply_collisions(a.x, dx, a, areas);
+        a.y += dy;
+        apply_collisions(a.y, dy, a, areas);
+
+        areas.insert(id, a);
+
+
         if (a.x < 0)
             a.x = 0;
         else if (a.x + a.w > 800)
             a.x = 800 - a.w;
-        a.y += dy;
         if (a.y < 0)
             a.y = 0;
         else if (a.y + a.h > 600)
             a.y = 600 - a.h;
+
     }
 
     dirs.clear();
+}
+
+inline
+char detect_collision(const area& a, const area& two)
+{
+    return (a.x + a.w >= two.x &&
+            two.x + two.w >= a.x) &&
+        a.y + a.h >= two.y &&
+        two.y + two.h >= a.y;
 }
