@@ -69,6 +69,10 @@ renderer init_renderer()
     glewExperimental = true;
     glewInit();
 
+    color ccolor = make_color_hex(0xD3D3D3);
+
+    glClearColor(ccolor.r, ccolor.g, ccolor.b, 0);
+
     renderer rendr;
 
     glGenVertexArrays(1, &rendr.vao);

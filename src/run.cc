@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "controller.hh"
+#include "level.hh"
 #include "physics.hh"
 #include "player.hh"
 #include "render.hh"
@@ -13,6 +14,7 @@ void run(sf::RenderWindow& window)
     window.setFramerateLimit(60);
     renderer rendr = init_renderer();
     state state = make_state();
+    load_level(make_level(), state);
     make_player(state);
     sf::Event event;
     while (window.isOpen())
