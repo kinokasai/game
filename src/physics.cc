@@ -17,7 +17,7 @@ void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas)
 }
 
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
-        sarray<float>& speeds)
+        sarray<float>& speeds, level& level)
 {
     for (auto &it : dirs)
     {
@@ -36,6 +36,9 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         apply_collisions(a.x, dx, a, nearbys);
         a.y += dy;
         apply_collisions(a.y, dy, a, nearbys);
+
+        a.x = fmax(fmin(a.x, level.w * level.wall_size - a.w), 0);
+        a.y = fmax(fmin(a.y, level.h * level.wall_size - a.h), 0);
     }
 
     dirs.clear();
