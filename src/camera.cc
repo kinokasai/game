@@ -28,5 +28,4 @@ void move_camera(state& state)
 
     cam.x = fmin(cam.x, cam.max_x - cam.win_x);
     cam.y = fmin(cam.y, cam.max_y - cam.win_y);
-    std::cout << cam.x << std::endl;
 }

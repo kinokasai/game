@@ -14,7 +14,6 @@ state::state()
 state make_state()
 {
     state state;
-    populate(state.areas, state.colors);
     return state;
 }
 
