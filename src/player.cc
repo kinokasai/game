@@ -10,4 +10,5 @@ void make_player(state& state)
     state.speeds.insert(id, 3.f);
     state.controllers.insert(id, make_controller(true, 0, 0));
     state.colors.insert(id, make_color(0, .6, .8));
+    state.player_id = id;
 }

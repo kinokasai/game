@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void draw_entities(renderer &rendr, sf::RenderWindow& window,
-        sarray<area>& areas, sarray<color>& colors)
+        sarray<area>& areas, sarray<color>& colors, camera& cam)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -19,8 +19,7 @@ void draw_entities(renderer &rendr, sf::RenderWindow& window,
     glUniformMatrix4fv(uview, 1, GL_FALSE, glm::value_ptr(vmat));
 
     /* Square the square - Aspect Ratio */
-
-    glm::mat4 omat = glm::ortho(0.0f, 800.0f, 600.f, 0.f, -1.f, 0.f);
+    glm::mat4 omat = glm::ortho(cam.x, cam.x + cam.win_x, cam.y + cam.win_y, cam.y);
 
     GLint uortho = glGetUniformLocation(rendr.program, "ortho");
     glUniformMatrix4fv(uortho, 1, GL_FALSE, glm::value_ptr(omat));

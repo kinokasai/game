@@ -36,9 +36,6 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         apply_collisions(a.x, dx, a, nearbys);
         a.y += dy;
         apply_collisions(a.y, dy, a, nearbys);
-
-        a.x = fmax(fmin(a.x, 800 - a.w), 0);
-        a.y = fmax(fmin(a.y, 600 - a.h), 0);
     }
 
     dirs.clear();

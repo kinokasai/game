@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#include "camera.hh"
 #include "controller.hh"
 #include "level.hh"
 #include "physics.hh"
@@ -14,8 +15,8 @@ void run(sf::RenderWindow& window)
     window.setFramerateLimit(60);
     renderer rendr = init_renderer();
     state state = make_state();
-    load_level(make_level(), state);
     make_player(state);
+    init_game(state, window);
     sf::Event event;
     while (window.isOpen())
     {
@@ -27,6 +28,7 @@ void run(sf::RenderWindow& window)
         apply_controls(state.controllers, state.pevents);
         apply_events(state);
         apply_physics(state.dirs, state.areas, state.speeds);
-        draw_entities(rendr, window, state.areas, state.colors);
+        move_camera(state);
+        draw_entities(rendr, window, state.areas, state.colors, state.cam);
     }
 }

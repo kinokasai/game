@@ -10,6 +10,7 @@ struct level
     int h;
     int w;
     std::vector<char> tilemap;
+    int wall_size;
 };
 
 void load_level(const level& level, state& state);

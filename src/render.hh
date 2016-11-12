@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "area.hh"
+#include "camera.hh"
 #include "color.hh"
 #include "sarray.hh"
 
@@ -19,6 +20,6 @@ struct renderer
 };
 
 void draw_entities(renderer& rendr, sf::RenderWindow& window,
-        sarray<area>& areas, sarray<color>& colors);
+        sarray<area>& areas, sarray<color>& colors, camera& cam);
 
 renderer init_renderer();
