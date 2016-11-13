@@ -28,6 +28,11 @@ void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
         pevents.push_back(std::make_pair(id, PlayerEvent::Up));
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         pevents.push_back(std::make_pair(id, PlayerEvent::Down));
+    /* This is dirty programming */
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Walk));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        pevents.push_back(std::make_pair(id, PlayerEvent::Run));
 }
 
 void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)

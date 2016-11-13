@@ -4,7 +4,7 @@
 void make_chest(float x, float y, int value, state& state)
 {
     int id = new_id();
-    std::cout << "Created chest id " << id << std::endl;
+    std::cerr << "Created chest id " << id << std::endl;
     state.areas.insert(id, make_area(x, y, 10, 10));
     state.colors.insert(id, make_color_hex(0xD15FEE));
     state.values.insert(id, value);

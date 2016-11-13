@@ -29,6 +29,12 @@ void apply_events(struct state& state)
                 state.dirs.insert(std::make_pair(id, vdir));
             state.moved.push_back(id);
         }
+
+        if (event == PlayerEvent::Run)
+            state.speeds[id] = 6.0f;
+        if (event == PlayerEvent::Walk)
+            state.speeds[id] = 3.0f;
+
     }
     state.pevents.clear();
 }

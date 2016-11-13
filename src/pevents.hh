@@ -7,7 +7,9 @@ enum PlayerEvent
     Left,
     Right,
     Up,
-    Down
+    Down,
+    Run,
+    Walk
 };
 
 void apply_events(struct state& state);
