@@ -21,6 +21,6 @@ vectwo get_empty_spot(level& level);
 
 inline
 float map_to_pixel(level& level, int x) { return x * level.tile_size;};
-vectwo map_to_pixel(level& level, vectwo& v);
+vectwo map_to_pixel(level& level, const vectwo& v);
 void load_level(const level& level, state& state);
 level make_level();

@@ -21,18 +21,22 @@ struct level make_level()
     for (int i = 0; i < 5; ++i)
         level.tilemap.push_back(1);
     for (int i = 5; i < level.h * level.w; ++i)
-        level.tilemap.push_back(std::rand()%3);
+        level.tilemap.push_back(std::rand() % 3);
+
     for (int i = 0; i < 10; ++i)
     {
         vectwo vec = get_empty_spot(level);
-        level.chest_pos.push_back(map_to_pixel(level, vec));
+        vectwo offset = make_vectwo(20, 20);
+        level.chest_pos.push_back(add_vectwo(map_to_pixel(level, vec), offset));
         level.values.push_back(std::rand() % 3000);
     }
+
     for (int i = 0; i < 10; ++i)
     {
         vectwo vec = get_empty_spot(level);
         level.enemy_pos.push_back(map_to_pixel(level, vec));
     }
+
     return level;
 }
 
@@ -55,7 +59,7 @@ void load_level(const level& level, state& state)
         make_enemy(pos.x, pos.y, state);
 }
 
-vectwo map_to_pixel(level& level, vectwo& v)
+vectwo map_to_pixel(level& level, const vectwo& v)
 {
     return scalar_mult(v, level.tile_size);
 }

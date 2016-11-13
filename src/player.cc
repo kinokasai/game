@@ -16,7 +16,7 @@ void make_player(state& state)
 
 void print_scores(state& state)
 {
-    std::cout << " --- \n\n";
+    std::cout << "\n --- \n\n";
     for (auto& pair : state.scores)
     {
         int id = pair.first;
