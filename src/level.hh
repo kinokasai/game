@@ -10,7 +10,10 @@ struct level
     int h;
     int w;
     std::vector<char> tilemap;
-    int wall_size;
+    static const int chestnum = 10;
+    static const int tile_size = 50;
+    float chest_pos[chestnum * 2];
+    int values[chestnum];
 };
 
 void load_level(const level& level, state& state);

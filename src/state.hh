@@ -19,9 +19,18 @@ struct state
     sarray<color> colors;
     sarray<struct controller> controllers;
     sarray<vectwo> dirs;
+    sarray<std::string> names;
+    sarray<std::function<
+        void(const std::pair<int, int>& ids, state& state)>> on_collides;
+    sarray<int> scores;
     sarray<float> speeds;
+    sarray<int> values;
+
     std::vector<std::pair<int, PlayerEvent>> pevents;
     std::vector<level> levels;
+    std::vector<int> entities;
+    std::vector<int> moved;
+    std::vector<int> solids;
     camera cam;
     int player_id;
 };

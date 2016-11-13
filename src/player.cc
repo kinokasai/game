@@ -11,4 +11,5 @@ void make_player(state& state)
     state.controllers.insert(id, make_controller(true, 0, 0));
     state.colors.insert(id, make_color(0, .6, .8));
     state.player_id = id;
+    state.names.insert(id, "Player 1");
 }

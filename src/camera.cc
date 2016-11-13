@@ -9,8 +9,8 @@ struct camera make_default_camera(level& level, sf::RenderWindow& window)
     cam.x = 0;
     cam.y = 0;
     cam.gap = 25;
-    cam.max_x = level.w * level.wall_size;
-    cam.max_y = level.h * level.wall_size;
+    cam.max_x = level.w * level.tile_size;
+    cam.max_y = level.h * level.tile_size;
     cam.win_x = window.getSize().x;
     cam.win_y = window.getSize().y;
     return cam;

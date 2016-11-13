@@ -16,8 +16,30 @@ void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas)
 
 }
 
+void apply_collisions(sarray<area>& areas, const std::vector<int>& entities,
+        std::vector<int>& moved, state& state)
+{
+    for (auto &it : moved)
+    {
+        auto& a = areas[it];
+
+        std::vector<std::pair<int, area>> collides;
+        for (auto& id : entities)
+        {
+            auto& area = areas[id];
+            if (is_near(100, a, area) && detect_collision(a, area))
+            {
+                auto pair = std::make_pair(it, id);
+                LOGC(pair, state);
+                state.on_collides[id](pair, state);
+            }
+        }
+    }
+    moved.clear();
+}
+
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
-        sarray<float>& speeds, level& level)
+        sarray<float>& speeds, level& level, std::vector<int> solids)
 {
     for (auto &it : dirs)
     {
@@ -29,16 +51,24 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         float dx = sin(angle) * std::abs(dir.x) * speeds[id];
         float dy = cos(angle) * std::abs(dir.y) * speeds[id];
 
-        auto fn = std::bind(is_near, 100, a, std::placeholders::_1);
-        std::vector<area> nearbys = areas.filter_vec(fn);
+        //auto fn = std::bind(is_near, 100, a, std::placeholders::_1);
+        //std::vector<area> nearbys = areas.filter_vec(fn);
+
+        std::vector<area> nearbys;
+        for (auto& id : solids)
+        {
+            auto& area = areas[id];
+            if (is_near(100, a, area))
+                nearbys.push_back(area);
+        }
 
         a.x += dx;
         apply_collisions(a.x, dx, a, nearbys);
         a.y += dy;
         apply_collisions(a.y, dy, a, nearbys);
 
-        a.x = fmax(fmin(a.x, level.w * level.wall_size - a.w), 0);
-        a.y = fmax(fmin(a.y, level.h * level.wall_size - a.h), 0);
+        a.x = fmax(fmin(a.x, level.w * level.tile_size - a.w), 0);
+        a.y = fmax(fmin(a.y, level.h * level.tile_size - a.h), 0);
     }
 
     dirs.clear();

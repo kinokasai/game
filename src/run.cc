@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "camera.hh"
+#include "chest.hh"
 #include "controller.hh"
 #include "level.hh"
 #include "physics.hh"
@@ -17,6 +18,7 @@ void run(sf::RenderWindow& window)
     state state = make_state();
     make_player(state);
     init_game(state, window);
+    make_chest(30, 30, 1000, state);
     sf::Event event;
     while (window.isOpen())
     {
@@ -27,7 +29,9 @@ void run(sf::RenderWindow& window)
 
         apply_controls(state.controllers, state.pevents);
         apply_events(state);
-        apply_physics(state.dirs, state.areas, state.speeds, state.levels[0]);
+        apply_physics(state.dirs, state.areas, state.speeds, state.levels[0],
+                state.solids);
+        apply_collisions(state.areas, state.entities, state.moved, state);
         move_camera(state);
         draw_entities(rendr, window, state.areas, state.colors, state.cam);
     }

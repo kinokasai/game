@@ -7,7 +7,10 @@
 state::state()
     : areas("areas"), colors("colors"),
       controllers("controllers"),
-      dirs("dirs"), speeds("speeds")
+      dirs("dirs"), names("names"),
+      on_collides("on_collides"),
+      scores("scores"),
+      speeds("speeds"), values("values")
 {
 }
 
