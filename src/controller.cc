@@ -18,6 +18,13 @@ controller make_controller(bool keyboard, int pid, int kid)
     return controller;
 }
 
+controller make_ia_controller()
+{
+    struct controller controller;
+    controller.control = random_ia;
+    return controller;
+}
+
 void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -49,8 +56,18 @@ void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
 
 void pad_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
 {
+    /* FIXME */
     id = 0;
     pevents = pevents;
+}
+
+void random_ia(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
+{
+    if (!(std::rand() % 10))
+    {
+        pevents.push_back(std::make_pair(id,
+                    static_cast<PlayerEvent>(std::rand()%4)));
+    }
 }
 
 void apply_controls(sarray<controller> controllers, std::vector<std::pair<int, PlayerEvent>>& pevents)

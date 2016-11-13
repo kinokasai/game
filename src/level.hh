@@ -4,17 +4,23 @@
 #include "color.hh"
 #include "sarray.hh"
 #include "state.hh"
+#include "vectwo.hh"
 
 struct level
 {
     int h;
     int w;
     std::vector<char> tilemap;
-    static const int chestnum = 10;
+    std::vector<vectwo> enemy_pos;
     static const int tile_size = 50;
-    float chest_pos[chestnum * 2];
-    int values[chestnum];
+    std::vector<vectwo> chest_pos;
+    std::vector<int> values;
 };
 
+vectwo get_empty_spot(level& level);
+
+inline
+float map_to_pixel(level& level, int x) { return x * level.tile_size;};
+vectwo map_to_pixel(level& level, vectwo& v);
 void load_level(const level& level, state& state);
 level make_level();

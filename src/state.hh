@@ -34,6 +34,7 @@ struct state
     std::vector<int> solids;
     camera cam;
     int player_id;
+    bool lost;
 };
 
 state make_state();

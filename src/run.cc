@@ -19,7 +19,7 @@ void run(sf::RenderWindow& window)
     make_player(state);
     init_game(state, window);
     sf::Event event;
-    while (window.isOpen())
+    while (window.isOpen() && !state.lost)
     {
         while(window.pollEvent(event))
             if (event.type == sf::Event::Closed ||
@@ -34,4 +34,5 @@ void run(sf::RenderWindow& window)
         move_camera(state);
         draw_entities(rendr, window, state.areas, state.colors, state.cam);
     }
+    print_scores(state);
 }

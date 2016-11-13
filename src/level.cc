@@ -1,6 +1,17 @@
-#include "factory.hh"
 #include "chest.hh"
+#include "enemy.hh"
+#include "factory.hh"
 #include "level.hh"
+
+vectwo get_empty_spot(level& level)
+{
+    vectwo vec;
+    do {
+        vec.x = std::rand() % level.w;
+        vec.y = std::rand() % level.h;
+    } while(!level.tilemap[vec.y * level.w + vec.x]);
+    return vec;
+}
 
 struct level make_level()
 {
@@ -11,17 +22,16 @@ struct level make_level()
         level.tilemap.push_back(1);
     for (int i = 5; i < level.h * level.w; ++i)
         level.tilemap.push_back(std::rand()%3);
-    for (int i = 0; i < level.chestnum; ++i)
+    for (int i = 0; i < 10; ++i)
     {
-        int x;
-        int y;
-        do {
-            x = std::rand() % level.w;
-            y = std::rand() % level.h;
-        } while (!level.tilemap[y * level.w + x]);
-        level.chest_pos[i*2] = x * level.tile_size + 20;
-        level.chest_pos[i*2+1] = y * level.tile_size + 20;
-        level.values[i] = std::rand() % 3000;
+        vectwo vec = get_empty_spot(level);
+        level.chest_pos.push_back(map_to_pixel(level, vec));
+        level.values.push_back(std::rand() % 3000);
+    }
+    for (int i = 0; i < 10; ++i)
+    {
+        vectwo vec = get_empty_spot(level);
+        level.enemy_pos.push_back(map_to_pixel(level, vec));
     }
     return level;
 }
@@ -39,7 +49,13 @@ void load_level(const level& level, state& state)
         if (!tilemap[i])
             make_wall(x, y, level.tile_size, level.tile_size, color, state);
     }
-    for (unsigned int i = 0; i < level.chestnum; ++i)
-        make_chest(level.chest_pos[i*2], level.chest_pos[i*2+1],
-                level.values[i], state);
+    for (unsigned int i = 0; i < level.chest_pos.size(); ++i)
+        make_chest(level.chest_pos[i].x, level.chest_pos[i].y, level.values[i], state);
+    for (auto& pos : level.enemy_pos)
+        make_enemy(pos.x, pos.y, state);
+}
+
+vectwo map_to_pixel(level& level, vectwo& v)
+{
+    return scalar_mult(v, level.tile_size);
 }

@@ -13,3 +13,14 @@ void make_player(state& state)
     state.player_id = id;
     state.names.insert(id, "Player 1");
 }
+
+void print_scores(state& state)
+{
+    std::cout << " --- \n\n";
+    for (auto& pair : state.scores)
+    {
+        int id = pair.first;
+        std::cout << state.names[id] << " has " << pair.second << " money.\n";
+    }
+    std::cout << "\n --- \n";
+}

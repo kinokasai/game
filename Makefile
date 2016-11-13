@@ -4,7 +4,7 @@ SRC= src/main.cc src/id.cc src/run.cc src/shader.cc src/render.cc \
 	 src/area.cc src/randomizer.cc src/state.cc src/controller.cc \
 	 src/pevents.cc src/vectwo.cc src/physics.cc src/logger.cc \
 	 src/clock.cc src/player.cc src/color.cc src/level.cc src/factory.cc \
-	 src/camera.cc src/helpers.cc src/chest.cc src/speed.cc
+	 src/camera.cc src/helpers.cc src/chest.cc src/speed.cc src/enemy.cc
 
 CXXFLAGS=-pedantic -g -Wall -Wextra -std=c++14 -DDEBUG
 
