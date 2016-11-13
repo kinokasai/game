@@ -39,7 +39,7 @@ void apply_collisions(sarray<area>& areas, const std::vector<int>& entities,
 }
 
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
-        sarray<float>& speeds, level& level, std::vector<int>& solids)
+        sarray<speed>& speeds, level& level, std::vector<int>& solids)
 {
     for (auto &it : dirs)
     {
@@ -48,8 +48,8 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         auto& a = areas[id];
 
         float angle = std::atan2(dir.x, dir.y);
-        float dx = sin(angle) * std::abs(dir.x) * speeds[id];
-        float dy = cos(angle) * std::abs(dir.y) * speeds[id];
+        float dx = sin(angle) * std::abs(dir.x) * get_speed(speeds[id]);
+        float dy = cos(angle) * std::abs(dir.y) * get_speed(speeds[id]);
 
         std::vector<area> nearbys;
         for (auto& id : solids)

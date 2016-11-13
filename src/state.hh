@@ -10,6 +10,7 @@
 #include "controller.hh"
 #include "pevents.hh"
 #include "sarray.hh"
+#include "speed.hh"
 #include "vectwo.hh"
 
 struct state
@@ -23,7 +24,7 @@ struct state
     sarray<std::function<
         void(const std::pair<int, int>& ids, state& state)>> on_collides;
     sarray<int> scores;
-    sarray<float> speeds;
+    sarray<speed> speeds;
     sarray<int> values;
 
     std::vector<std::pair<int, PlayerEvent>> pevents;

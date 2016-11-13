@@ -31,9 +31,9 @@ void apply_events(struct state& state)
         }
 
         if (event == PlayerEvent::Run)
-            state.speeds[id] = 6.0f;
+            state.speeds[id] = make_speed(6.0f);
         if (event == PlayerEvent::Walk)
-            state.speeds[id] = 3.0f;
+            state.speeds[id] = make_speed(3.0f);
 
     }
     state.pevents.clear();
