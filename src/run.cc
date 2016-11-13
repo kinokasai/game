@@ -18,7 +18,6 @@ void run(sf::RenderWindow& window)
     state state = make_state();
     make_player(state);
     init_game(state, window);
-    make_chest(30, 30, 1000, state);
     sf::Event event;
     while (window.isOpen())
     {
