@@ -63,10 +63,24 @@ void pad_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
 
 void random_ia(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
 {
-    if (!(std::rand() % 10))
+    static sf::Clock clock;
+    static float seconds = 0;
+    static int event_x = 0;
+    static int event_y = 0;
+    static int event = 0;
+    if (clock.getElapsedTime().asSeconds() - seconds > .5f)
     {
-        pevents.push_back(std::make_pair(id,
-                    static_cast<PlayerEvent>(std::rand()%4)));
+        seconds = clock.getElapsedTime().asSeconds();
+        event = std::rand() % 2;
+        event_x = std::rand() % 2;
+        event_y = std::rand() % 2 + 2;
+    }
+    if (event)
+    {
+        if (event_x)
+            pevents.push_back(std::make_pair(id, static_cast<PlayerEvent>(event_x)));
+        if (event_y)
+            pevents.push_back(std::make_pair(id, static_cast<PlayerEvent>(event_y)));
     }
 }
 

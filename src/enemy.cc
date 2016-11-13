@@ -9,7 +9,7 @@ void make_enemy(float x, float y, state& state)
     state.colors.insert(id, make_color(.8f, 0.f, .2f));
     state.controllers.insert(id, make_ia_controller());
     state.entities.push_back(id);
-    state.speeds.insert(id, make_speed(15.f));
+    state.speeds.insert(id, make_speed(1.f));
     state.on_collides.insert(id, on_collide_enemy);
     state.names.insert(id, "Guard " + std::to_string(id));
 }
