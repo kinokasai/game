@@ -27,7 +27,7 @@ void apply_events(struct state& state)
                 it->second = add_vectwo(it->second, vdir);
             else
                 state.dirs.insert(std::make_pair(id, vdir));
-            state.moved.push_back(id);
+            state.moved.insert(id);
         }
 
         if (event == PlayerEvent::Stop)

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/container/flat_set.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
@@ -33,7 +34,7 @@ struct state
     std::vector<int> controlled;
     std::vector<int> entities;
     std::vector<level> levels;
-    std::vector<int> moved;
+    boost::container::flat_set<int> moved;
     std::vector<int> solids;
     camera cam;
     int player_id;

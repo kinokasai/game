@@ -30,7 +30,7 @@ void run(sf::RenderWindow& window)
         apply_events(state);
         apply_physics(state.dirs, state.areas, state.speeds, state.levels[0],
                 state.solids);
-        apply_collisions(state.areas, state.entities, state.moved, state);
+        apply_collisions(state);
         move_camera(state);
         draw_entities(rendr, window, state.areas, state.colors, state.cam);
     }

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <set>
 
 #include "physics.hh"
 
@@ -16,9 +17,13 @@ void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas)
 
 }
 
-void apply_collisions(sarray<area>& areas, const std::vector<int>& entities,
-        std::vector<int>& moved, state& state)
+std::vector<std::pair<int, int>> detect_collisions(sarray<area>& areas,
+        const std::vector<int>& entities,
+        boost::container::flat_set<int> moved, state& state)
 {
+    std::vector<std::pair<int, int>> collisions;
+    std::set<int> hey(moved.begin(), moved.end());
+
     for (auto &it : moved)
     {
         auto& a = areas[it];
@@ -31,11 +36,19 @@ void apply_collisions(sarray<area>& areas, const std::vector<int>& entities,
             {
                 auto pair = std::make_pair(it, id);
                 LOGC(pair, state);
-                state.on_collides[id](pair, state);
+                collisions.push_back(pair);
             }
         }
     }
     moved.clear();
+    return collisions;
+}
+
+void apply_collisions(state& state)
+{
+    auto vec = detect_collisions(state.areas, state.entities, state.moved, state);
+    for (auto& pair : vec)
+        state.on_collides[pair.second](pair, state);
 }
 
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
