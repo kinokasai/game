@@ -5,8 +5,9 @@
 #include "state.hh"
 
 state::state()
-    : areas("areas"), colors("colors"),
-      controllers("controllers"),
+    : areas("areas"), ai_components("ai_components"),
+      colors("colors"),
+      controls("controls"),
       dirs("dirs"), names("names"),
       on_collides("on_collides"),
       scores("scores"),

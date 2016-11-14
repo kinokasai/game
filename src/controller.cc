@@ -2,95 +2,70 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Joystick.hpp>
 #include "controller.hh"
+#include "id.hh"
 
-controller make_controller(bool keyboard, int pid, int kid)
+void make_player_controller(int id, state& state)
 {
-    struct controller controller;
-    if (keyboard)
-        controller.control = keyboard_control;
+    state.controls.insert(id, keyboard_control);
+    state.controlled.push_back(id);
+}
+
+void make_ai_controller(int id, state& state)
+{
+    state.controls.insert(id, random_control);
+    ai_component component;
+    component.seconds = -2;
+    state.ai_components.insert(id, component);
+    state.controlled.push_back(id);
+}
+
+void apply_controls(state& state)
+{
+    for (auto &id : state.controlled)
+        state.controls[id](id, state);
+}
+
+void keyboard_control(int id, state& state)
+{
+    std::vector<std::pair<int, PlayerEvent>> events;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        events.push_back(std::make_pair(id, PlayerEvent::Left));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        events.push_back(std::make_pair(id, PlayerEvent::Right));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        events.push_back(std::make_pair(id, PlayerEvent::Up));
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        events.push_back(std::make_pair(id, PlayerEvent::Down));
+    if (events.empty())
+        events.push_back(std::make_pair(id, PlayerEvent::Stop));
     else
     {
-        controller.control = pad_control;
-        controller.id = pid;
+        /* This is dirty programming */
+        if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            events.push_back(std::make_pair(id, PlayerEvent::Walk));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            events.push_back(std::make_pair(id, PlayerEvent::Run));
     }
-    if (kid)
-        controller.control = second_keyboard;
-    return controller;
+    for (auto &it : events)
+        state.pevents.push_back(it);
 }
 
-controller make_ia_controller()
+void random_control(int id, state& state)
 {
-    struct controller controller;
-    controller.control = random_ia;
-    return controller;
-}
-
-void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
-{
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Left));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Right));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Up));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Down));
-    /* This is dirty programming */
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Walk));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Run));
-}
-
-void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
-{
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Left));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Right));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Up));
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        pevents.push_back(std::make_pair(id, PlayerEvent::Down));
-}
-
-void pad_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
-{
-    /* FIXME */
-    id = 0;
-    pevents = pevents;
-}
-
-void random_ia(int id, std::vector<std::pair<int, PlayerEvent>>& pevents)
-{
-    static sf::Clock clock;
-    static float seconds = 0;
-    static int event_x = 0;
-    static int event_y = 0;
-    static int event = 0;
-    if (clock.getElapsedTime().asSeconds() - seconds > .5f)
+    auto& ai = state.ai_components[id];
+    auto time = ai.clock.getElapsedTime().asSeconds();
+    if (time - ai.seconds > 1)
     {
-        seconds = clock.getElapsedTime().asSeconds();
-        event = std::rand() % 2;
-        event_x = std::rand() % 2;
-        event_y = std::rand() % 2 + 2;
+        ai.event_x = std::rand() % 3;
+        ai.event_y = std::rand() % 3 + 2;
+        ai.event_y *= (ai.event_y != 2);
+        ai.seconds = time;
+        state.pevents.push_back(std::make_pair(id, PlayerEvent::AIWalk));
     }
-    if (event)
-    {
-        if (event_x)
-            pevents.push_back(std::make_pair(id, static_cast<PlayerEvent>(event_x)));
-        if (event_y)
-            pevents.push_back(std::make_pair(id, static_cast<PlayerEvent>(event_y)));
-    }
-}
-
-void apply_controls(sarray<controller> controllers, std::vector<std::pair<int, PlayerEvent>>& pevents)
-{
-    for (auto& it : controllers)
-    {
-        auto id = it.first;
-        auto controller = it.second;
-
-        controller.control(id, pevents);
-    }
+    if (ai.event_x)
+        state.pevents.push_back(
+            std::make_pair(id, static_cast<PlayerEvent>(ai.event_x)));
+    if (ai.event_y)
+        state.pevents.push_back(
+            std::make_pair(id, static_cast<PlayerEvent>(ai.event_y)));
 }

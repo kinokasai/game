@@ -1,22 +1,14 @@
 #pragma once
-#include <functional>
-#include <vector>
+
+#include "ai_component.hh"
 #include "pevents.hh"
-#include "sarray.hh"
 
-struct controller
-{
-    int id;
-    std::function<void(int, std::vector<std::pair<int, PlayerEvent>>&)> control;
-};
+struct state;
 
-controller make_controller(bool keyboard, int id, int modif);
-controller make_ia_controller();
-void control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
-void keyboard_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
-void second_keyboard(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
-void pad_control(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
-void apply_controls(sarray<controller> controllers,
-        std::vector<std::pair<int, PlayerEvent>>& pevents);
+void apply_controls(state& state);
+void make_ai_controller(int id, state& state);
+void make_player_controller(int id, state& state);
+void keyboard_control(int id, state& state);
+void random_control(int id, state& state);
 
-void random_ia(int id, std::vector<std::pair<int, PlayerEvent>>& pevents);
+#include "state.hh"

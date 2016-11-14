@@ -26,7 +26,7 @@ void run(sf::RenderWindow& window)
                     sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 window.close();
 
-        apply_controls(state.controllers, state.pevents);
+        apply_controls(state);
         apply_events(state);
         apply_physics(state.dirs, state.areas, state.speeds, state.levels[0],
                 state.solids);

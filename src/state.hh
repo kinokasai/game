@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "area.hh"
+#include "ai_component.hh"
 #include "camera.hh"
 #include "color.hh"
 #include "controller.hh"
@@ -17,8 +18,9 @@ struct state
 {
     state();
     sarray<area> areas;
+    sarray<ai_component> ai_components;
     sarray<color> colors;
-    sarray<struct controller> controllers;
+    sarray<std::function<void(int, state& state)>> controls;
     sarray<vectwo> dirs;
     sarray<std::string> names;
     sarray<std::function<
@@ -28,8 +30,9 @@ struct state
     sarray<int> values;
 
     std::vector<std::pair<int, PlayerEvent>> pevents;
-    std::vector<level> levels;
+    std::vector<int> controlled;
     std::vector<int> entities;
+    std::vector<level> levels;
     std::vector<int> moved;
     std::vector<int> solids;
     camera cam;

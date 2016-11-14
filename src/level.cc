@@ -34,7 +34,8 @@ struct level make_level()
     for (int i = 0; i < 10; ++i)
     {
         vectwo vec = get_empty_spot(level);
-        level.enemy_pos.push_back(map_to_pixel(level, vec));
+        vectwo offset = make_vectwo(1, 1);
+        level.enemy_pos.push_back(add_vectwo(map_to_pixel(level, vec), offset));
     }
 
     return level;
