@@ -13,6 +13,7 @@ state::state()
       scores("scores"),
       speeds("speeds"), values("values")
 {
+	this->lost = false;
 }
 
 state make_state()
