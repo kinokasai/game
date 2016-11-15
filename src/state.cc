@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "level.hh"
+#include "palette.hh"
 #include "randomizer.hh"
 #include "state.hh"
 
@@ -14,6 +15,8 @@ state::state()
       speeds("speeds"), values("values")
 {
 	this->lost = false;
+    this->palette_colors = make_palettes();
+    this->palette = 0;
 }
 
 state make_state()

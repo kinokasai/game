@@ -9,7 +9,7 @@ void make_player(state& state)
     state.areas.insert(id, make_area(0, 0,  20, 20));
     state.speeds.insert(id, make_speed(3.f));
     make_player_controller(id, state);
-    state.colors.insert(id, make_color(0, .6, .8));
+    state.colors.insert(id, 2);
     state.player_id = id;
     state.names.insert(id, "Player 1");
 }

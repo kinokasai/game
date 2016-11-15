@@ -20,6 +20,6 @@ struct renderer
 };
 
 void draw_entities(renderer& rendr, sf::RenderWindow& window,
-        sarray<area>& areas, sarray<color>& colors, camera& cam);
+        sarray<area>& areas, sarray<int>& colors, camera& cam, state& state);
 
 renderer init_renderer();

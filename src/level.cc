@@ -44,7 +44,6 @@ struct level make_level()
 void load_level(const level& level, state& state)
 {
     auto& tilemap = level.tilemap;
-    color color = make_color_hex(0x323232);
     int x = 0;
     int y = 0;
     for (unsigned int i = 0; i < tilemap.size(); ++i)
@@ -52,7 +51,7 @@ void load_level(const level& level, state& state)
         x = (i % level.w) * level.tile_size;
         y = (int)(i / level.h) * level.tile_size;
         if (!tilemap[i])
-            make_wall(x, y, level.tile_size, level.tile_size, color, state);
+            make_wall(x, y, level.tile_size, level.tile_size, state);
     }
     for (unsigned int i = 0; i < level.chest_pos.size(); ++i)
         make_chest(level.chest_pos[i].x, level.chest_pos[i].y, level.values[i], state);

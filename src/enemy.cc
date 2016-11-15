@@ -6,7 +6,7 @@ void make_enemy(float x, float y, state& state)
 {
     int id = new_id();
     state.areas.insert(id, make_area(x, y, 20, 20));
-    state.colors.insert(id, make_color(.8f, 0.f, .2f));
+    state.colors.insert(id, 3);
     //state.controllers.insert(id, make_ia_controller());
     make_ai_controller(id, state);
     state.entities.push_back(id);

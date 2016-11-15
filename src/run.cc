@@ -32,7 +32,7 @@ void run(sf::RenderWindow& window)
                 state.solids);
         apply_collisions(state);
         move_camera(state);
-        draw_entities(rendr, window, state.areas, state.colors, state.cam);
+        draw_entities(rendr, window, state.areas, state.colors, state.cam, state);
     }
     print_scores(state);
 }

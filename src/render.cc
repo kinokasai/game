@@ -1,5 +1,6 @@
 #include "area.hh"
 #include "color.hh"
+#include "palette.hh"
 #include "render.hh"
 #include "sarray.hh"
 #include "shader.hh"
@@ -9,8 +10,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void draw_entities(renderer &rendr, sf::RenderWindow& window,
-        sarray<area>& areas, sarray<color>& colors, camera& cam)
+        sarray<area>& areas, sarray<int>& colors, camera& cam, state& state)
 {
+    color ccolor = get_color(0, state);
+    glClearColor(ccolor.r, ccolor.g, ccolor.b, 0);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::mat4 vmat;
@@ -40,7 +44,7 @@ void draw_entities(renderer &rendr, sf::RenderWindow& window,
         GLint transform = glGetUniformLocation(rendr.program, "model");
         glUniformMatrix4fv(transform, 1, GL_FALSE, glm::value_ptr(mmat));
 
-        color color = colors[id];
+        color color = get_color(colors[id], state);
         GLint ucolor = glGetUniformLocation(rendr.program, "color");
         glUniform3f(ucolor, color.r, color.g, color.b);
 
@@ -67,10 +71,6 @@ renderer init_renderer()
 
     glewExperimental = true;
     glewInit();
-
-    color ccolor = make_color_hex(0xD3D3D3);
-
-    glClearColor(ccolor.r, ccolor.g, ccolor.b, 0);
 
     renderer rendr;
 
