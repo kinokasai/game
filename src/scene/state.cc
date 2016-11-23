@@ -2,7 +2,6 @@
 
 #include "level.hh"
 #include "palette.hh"
-#include "randomizer.hh"
 #include "state.hh"
 
 state::state()

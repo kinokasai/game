@@ -35,7 +35,7 @@ void check_shader(GLuint shader, std::string name)
 GLuint get_vertex_shader()
 {
     GLuint vert = glCreateShader(GL_VERTEX_SHADER);
-    const char* vcode = load_shader("src/vertex.glsl");
+    const char* vcode = load_shader("src/graphics/vertex.glsl");
     glShaderSource(vert, 1, &vcode, NULL);
     glCompileShader(vert);
     check_shader(vert, "vert");
@@ -46,7 +46,7 @@ GLuint get_vertex_shader()
 GLuint get_fragment_shader()
 {
     GLuint frag = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fcode = load_shader("src/fragment.glsl");
+    const char* fcode = load_shader("src/graphics/fragment.glsl");
     glShaderSource(frag, 1, &fcode, NULL);
     glCompileShader(frag);
     check_shader(frag, "frag");
