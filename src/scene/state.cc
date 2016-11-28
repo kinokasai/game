@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "bump.hh"
 #include "level.hh"
 #include "palette.hh"
 #include "state.hh"
@@ -8,14 +9,16 @@ state::state()
     : areas("areas"), ai_components("ai_components"),
       colors("colors"),
       controls("controls"),
-      dirs("dirs"), names("names"),
-      on_collides("on_collides"),
+      dirs("dirs"), delta_moves("delta"),
+      names("names"), bumps("bumps"),
       scores("scores"),
-      speeds("speeds"), values("values")
+      speeds("speeds"), types("types"),
+      values("values")
 {
-	this->lost = false;
+    this->lost = false;
     this->palette_colors = make_palettes();
     this->palette = 0;
+    this->bumps = init_bumps();
 }
 
 state make_state()

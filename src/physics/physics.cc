@@ -2,59 +2,14 @@
 #include <set>
 
 #include "physics.hh"
-
-void apply_collisions(float& axis, float dx, area& a, std::vector<area>& areas)
-{
-    auto i = areas.cbegin();
-    while (i != areas.cend())
-    {
-        while (detect_collision(a, *i))
-            /* We need /2 because of float rounding behavior */
-            /* It's basically adding 0.5f */
-            axis -= dx/fmax(dx, -dx)/4.0f;
-        ++i;
-    }
-
-}
-
-std::vector<std::pair<int, int>> detect_collisions(sarray<area>& areas,
-        const std::vector<int>& entities,
-        boost::container::flat_set<int> moved, state& state)
-{
-    std::vector<std::pair<int, int>> collisions;
-    std::set<int> hey(moved.begin(), moved.end());
-
-    for (auto &it : moved)
-    {
-        auto& a = areas[it];
-
-        std::vector<std::pair<int, area>> collides;
-        for (auto& id : entities)
-        {
-            auto& area = areas[id];
-            if (is_near(100, a, area) && detect_collision(a, area))
-            {
-                auto pair = std::make_pair(it, id);
-                LOGC(pair, state);
-                collisions.push_back(pair);
-            }
-        }
-    }
-    moved.clear();
-    return collisions;
-}
-
-void apply_collisions(state& state)
-{
-    auto vec = detect_collisions(state.areas, state.entities, state.moved, state);
-    for (auto& pair : vec)
-        state.on_collides[pair.second](pair, state);
-}
+#include "bump.hh"
 
 void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
-        sarray<speed>& speeds, level& level, std::vector<int>& solids)
+        sarray<speed>& speeds, level& level,
+        std::vector<int>& entities, state& state)
 {
-    for (auto &it : dirs)
+    sarray<std::pair<vectwo, vectwo>> moved("moved");
+    for (auto& it : dirs)
     {
         int id = it.first;
         vectwo& dir = it.second;
@@ -63,32 +18,37 @@ void apply_physics(sarray<vectwo>& dirs, sarray<area>& areas,
         float angle = std::atan2(dir.x, dir.y);
         float dx = sin(angle) * std::abs(dir.x) * get_speed(speeds[id]);
         float dy = cos(angle) * std::abs(dir.y) * get_speed(speeds[id]);
-
-        std::vector<area> nearbys;
-        for (auto& id : solids)
-        {
-            auto& area = areas[id];
-            if (is_near(100, a, area))
-                nearbys.push_back(area);
-        }
-
-        a.x += dx;
-        apply_collisions(a.x, dx, a, nearbys);
-        a.y += dy;
-        apply_collisions(a.y, dy, a, nearbys);
-
+        vectwo from = make_vectwo(a.x, a.y);
+        vectwo delta = make_vectwo(dx +0.0000001f, dy + 0.000001f);
+        a.move(delta);
         a.x = fmax(fmin(a.x, level.w * level.tile_size - a.w), 0);
         a.y = fmax(fmin(a.y, level.h * level.tile_size - a.h), 0);
+        moved.insert(std::make_pair(id, std::make_pair(from, delta)));
+        state.delta_moves.insert(std::make_pair(id, delta));
     }
 
     dirs.clear();
-}
+    std::vector<std::pair<int, int>> collisions;
+    for (auto& it : moved)
+    {
+        int self_id = it.first;
+        auto& self_area = areas[self_id];
 
-inline
-char detect_collision(const area& a, const area& two)
-{
-    return (a.x + a.w >= two.x &&
-            two.x + two.w >= a.x) &&
-        a.y + a.h >= two.y &&
-        two.y + two.h >= a.y;
+        std::vector<int> nearbys(10);
+        for (auto& id : entities)
+        {
+            auto& area = areas[id];
+            if (is_near(100, self_area, area) && detect_bump(self_area, area))
+                collisions.emplace_back(std::make_pair(self_id, id));
+        }
+    }
+
+    type_map type_ids;
+    for (auto& it : collisions)
+    {
+        int xid = it.first;
+        int yid = it.second;
+        bump(xid, yid, state);
+    }
+    state.delta_moves.clear();
 }

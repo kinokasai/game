@@ -11,7 +11,9 @@ void make_player(state& state)
     make_player_controller(id, state);
     state.colors.insert(id, 2);
     state.player_id = id;
+    state.types.insert(id, Type::Player);
     state.names.insert(id, "Player 1");
+    state.entities.push_back(id);
 }
 
 void print_scores(state& state)

@@ -9,22 +9,16 @@ void make_chest(float x, float y, int value, state& state)
     state.colors.insert(id, 4);
     state.values.insert(id, value);
     state.entities.push_back(id);
-    state.on_collides.insert(id, on_collide_chest);
+    state.types.insert(id, Type::Chest);
     state.names.insert(id, "Chest");
 }
 
 void delete_chest(const int id, state& state)
 {
+    assert(state.types[id] == Type::Chest);
     state.areas.erase(id);
     state.colors.erase(id);
     state.values.erase(id);
     state.entities.erase(std::find(state.entities.begin(), state.entities.end(), id));
-    state.on_collides.erase(id);
-}
-
-void on_collide_chest(const std::pair<int, int>& ids, state& state)
-{
-    state.scores[ids.first] += state.values[ids.second];
-    Logger::log().log_score_increase(ids.first, state);
-    delete_chest(ids.second, state);
+    state.types.erase(id);
 }

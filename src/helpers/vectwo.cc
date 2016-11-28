@@ -17,3 +17,8 @@ vectwo scalar_mult(const vectwo& a, float n)
 {
     return make_vectwo(a.x * n, a.y * n);
 }
+
+vectwo reverse_vectwo(const vectwo& a)
+{
+    return make_vectwo(-a.x, -a.y);
+}

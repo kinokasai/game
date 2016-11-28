@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/container/flat_set.hpp>
+#include <unordered_map>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
@@ -13,7 +14,11 @@
 #include "pevents.hh"
 #include "sarray.hh"
 #include "speed.hh"
+#include "type.hh"
 #include "vectwo.hh"
+
+using type_map = std::unordered_multimap<Type, int>;
+using bump_func = std::function<void(type_map&, state&)>;
 
 struct state
 {
@@ -23,11 +28,12 @@ struct state
     sarray<int> colors;
     sarray<std::function<void(int, state& state)>> controls;
     sarray<vectwo> dirs;
+    sarray<vectwo> delta_moves;
     sarray<std::string> names;
-    sarray<std::function<
-        void(const std::pair<int, int>& ids, state& state)>> on_collides;
+    sarray<bump_func> bumps;
     sarray<int> scores;
     sarray<speed> speeds;
+    sarray<Type> types;
     sarray<int> values;
 
     std::vector<std::pair<int, PlayerEvent>> pevents;

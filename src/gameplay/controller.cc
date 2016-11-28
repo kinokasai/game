@@ -69,3 +69,7 @@ void random_control(int id, state& state)
         state.pevents.push_back(
             std::make_pair(id, static_cast<PlayerEvent>(ai.event_y)));
 }
+
+void inert_control(int id, state& state)
+{
+}

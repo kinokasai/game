@@ -1,7 +1,7 @@
 #include "chest.hh"
 #include "enemy.hh"
-#include "factory.hh"
 #include "level.hh"
+#include "wall.hh"
 
 vectwo get_empty_spot(level& level)
 {

@@ -1,3 +1,4 @@
+#include "id.hh"
 #include "wall.hh"
 
 void make_wall(float x, float y, float h, float w,
@@ -8,4 +9,6 @@ void make_wall(float x, float y, float h, float w,
     state.colors.insert(id, 1);
     state.solids.push_back(id);
     state.names.insert(id, "Wall");
+    state.entities.emplace_back(id);
+    state.types.insert(id, Type::Wall);
 }

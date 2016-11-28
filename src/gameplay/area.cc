@@ -12,6 +12,12 @@ area make_area(float x, float y, float h, float w)
     return area;
 }
 
+void area::move(vectwo delta)
+{
+    x += delta.x;
+    y += delta.y;
+}
+
 bool area::operator==(area& two)
 {
     return x == two.x && y == two.y
