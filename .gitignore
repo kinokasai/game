@@ -1,0 +1,12 @@
+*.obj
+*.suo
+*.exe
+thief.sln
+*.db
+thief.vcxproj
+*.filters
+Debug/*
+Release/*
+*.user
+thief.VC.VC.opendb
+*.vspx
