@@ -16,7 +16,7 @@ sarray<bump_func> init_bumps()
     bumps.insert(hash(Type::Guard, Type::Chest), do_nothing);
     bumps.insert(hash(Type::Guard, Type::Guard), bump_guard_guard);
     bumps.insert(hash(Type::Guard, Type::Wall), bump_guard_wall);
-    bumps.insert(hash(Type::Wall, Type::Wall), bump_wall_wall);
+    bumps.insert(hash(Type::Wall, Type::Wall), do_nothing);
     return bumps;
 }
 
@@ -40,7 +40,7 @@ void bump_player_chest(type_map& ids, state& state)
 
 void bump_player_guard(type_map& ids, state& state)
 {
-    std::cout << "You've been \033[31m DEAD \033[0m\n";
+    std::cout << "You've been \033[31m SAVAGELY DISMEMBERED \033[0m\n";
     state.lost = true;
     //push_back(state, ids.find(Type::Player)->second, ids.find(Type::Guard)->second);
 }
